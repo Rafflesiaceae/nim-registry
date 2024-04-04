@@ -71,6 +71,11 @@ try:
   assert(handle.countSubkeys() == 2)
   delSubkey(handle, "InnerKey")
   assert(handle.countSubkeys() == 1)
+
+  assert("StringValue" in toSeq(handle.enumValueNames()))
+  handle.delValue("StringValue")
+  assert("StringValue" notin toSeq(handle.enumValueNames()))
+
   delTree(handle, "")
   assert(handle.countSubkeys() == 0)
 

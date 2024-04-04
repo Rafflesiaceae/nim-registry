@@ -108,6 +108,9 @@ proc regDeleteKeyEx(handle: RegHandle, lpSubKey: WideCString,
   samDesired: RegKeyRights, Reserved: DWORD): LONG
   {.stdcall, dynlib: "advapi32", importc: "RegDeleteKeyExW".}
 
+proc regDeleteValue(handle: RegHandle, lpValueName: WideCString): LONG
+  {.stdcall, dynlib: "advapi32", importc: "RegDeleteValueW".}
+
 proc regDeleteTree(handle: RegHandle, lpSubKey: WideCString): LONG
   {.stdcall, dynlib: "advapi32", importc: "RegDeleteTreeW".}
 
@@ -523,6 +526,10 @@ proc delSubkey*(handle: RegHandle, subkey: string,
   ## `samDesired` should be ``samWow32`` or ``samWow64``.
   regThrowOnFail(regDeleteKeyEx(handle, newWideCString(subkey), samDesired,
     0.DWORD))
+
+proc delValue*(handle: RegHandle, value: string) {.sideEffect.} =
+  ## deletes the specified value.
+  regThrowOnFail(regDeleteValue(handle, newWideCString(value)))
 
 proc delTree*(handle: RegHandle, subkey: string) {.sideEffect.} =
   ## deletes the subkeys and values of the specified key recursively. `subkey`
